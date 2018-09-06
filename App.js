@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button,AppRegistry } from 'react-native';
-import { ImagePicker } from 'expo';
-import CameraScreen from './components/CameraScreen';
+import Main from './main'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import rootReducer from './reducers'
 
+const store = createStore(rootReducer)
 
 export default class App extends React.Component {
-  
   render() {
     return (
-      <CameraScreen></CameraScreen>
-    );
+      <Provider store={store}> 
+        <Main />
+      </Provider>
+    )
   }
-};
+}
