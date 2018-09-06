@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button,AppRegist
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addImage } from '../actions';
+import { callAPI } from '../api';
 
 
 class PickImage extends React.Component {
@@ -24,9 +25,14 @@ class PickImage extends React.Component {
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
           aspect: [4, 3],
+          base64: true,
         });
-        this.props.dispatch(addImage(result.uri))
-        //console.log(result.uri);
+        callAPI.post(result.base64)
+          .then((response) => {
+            this.props.dispatch(addImage(response.data.link))
+          }, (error) => {
+            console.log('error: ', error)
+          })
       };
 }
 
