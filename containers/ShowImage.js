@@ -2,11 +2,14 @@ import React from 'react';
 import { Image, Text } from 'react-native';
 import {bindActionCreators} from 'redux'
 import { connect } from 'react-redux';
+import { uploadImgur } from '../api';
+
 
 class ImageView extends React.Component {
     constructor(props){
         super(props);
-      }
+    }
+
     render() {
         if(this.props.image.length > 0) {
             return (
