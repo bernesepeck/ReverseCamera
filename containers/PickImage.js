@@ -3,8 +3,8 @@ import { ImagePicker } from 'expo';
 import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button,AppRegistry } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { addImage } from '../actions';
-import { callAPI } from '../api';
+import { addImage, addWords } from '../actions';
+import { callAPI, clarifaiCall } from '../api';
 
 
 class PickImage extends React.Component {
@@ -30,6 +30,8 @@ class PickImage extends React.Component {
         callAPI.post(result.base64)
           .then((response) => {
             this.props.dispatch(addImage(response.data.link))
+            let words = clarifaiCall.call(response.data.link)
+            this.props.dispatch(addWords(words))
           }, (error) => {
             console.log('error: ', error)
           })
@@ -37,7 +39,7 @@ class PickImage extends React.Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { actions: bindActionCreators(addImage, dispatch) }
+  return { actions: bindActionCreators(addImage, addWords, dispatch) }
 }
 export default connect(mapDispatchToProps)(PickImage);
 
