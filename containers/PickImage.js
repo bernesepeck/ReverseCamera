@@ -1,14 +1,17 @@
 import React from 'react';
-import { ImagePicker } from 'expo';
+import { ImagePicker, } from 'expo';
 import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button,AppRegistry } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addImage, addWords } from '../actions';
-import { callAPI, clarifaiCall } from '../api';
+import { callAPI, clarifaiCall, getGIF } from '../api';
 
 
 class PickImage extends React.Component {
-      
+    constructor(props) {
+      super(props);
+      this.state = {imgurLink: ""};
+    }
       render() {
     
         return (
@@ -28,12 +31,15 @@ class PickImage extends React.Component {
           base64: true,
         });
         callAPI.post(result.base64)
-          .then((response) => {
-            this.props.dispatch(addImage(response.data.link))
-            let words = clarifaiCall.call(response.data.link)
-            this.props.dispatch(addWords(words))
-          }, (error) => {
-            console.log('error: ', error)
+          .then((imgurResponse) => {
+            
+            clarifaiCall.call(imgurResponse.data.link).then((clrafaiResponse) => {
+              getGIF.call(clrafaiResponse).then((gifResponse) => {
+                console.log(gifResponse.data.images.downsized.url)
+                this.props.dispatch(addImage(gifResponse.data.images.downsized.url))
+              }
+              )
+            })
           })
       };
 }
