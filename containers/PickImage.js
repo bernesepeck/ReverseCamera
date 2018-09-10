@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImagePicker, } from 'expo';
-import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button,AppRegistry } from 'react-native';
+import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button,AppRegistry, TouchableHighlight } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { addImage, addWords } from '../actions';
@@ -15,16 +15,19 @@ class PickImage extends React.Component {
       render() {
     
         return (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button
-              title="Pick an image from camera roll"
-              onPress={this._pickImage}
-            />
-          </View>
+            <View>
+              <TouchableHighlight onPress={this._pickImage}>
+                <Image
+                  source={require('../assets/picture.png')}
+                  style={styles.icon}
+                />
+              </TouchableHighlight>
+            </View>
         );
       }
     
       _pickImage = async () => {
+        let deleteHash = ""
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
           aspect: [4, 3],
@@ -32,11 +35,11 @@ class PickImage extends React.Component {
         });
         callAPI.post(result.base64)
           .then((imgurResponse) => {
-            
+            deleteHash = imgurResponse.data.deletehash
             clarifaiCall.call(imgurResponse.data.link).then((clrafaiResponse) => {
               getGIF.call(clrafaiResponse).then((gifResponse) => {
-                console.log(gifResponse.data.images.downsized.url)
-                this.props.dispatch(addImage(gifResponse.data.images.downsized.url))
+                this.props.dispatch(addImage(gifResponse.data.images.downsized_medium.url))
+                callAPI.delete(deleteHash)
               }
               )
             })

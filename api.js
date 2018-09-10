@@ -31,6 +31,13 @@ export const callAPI = {
       .then((response) => {
         return response.json()
       })
+    },
+    delete (deletehash) {
+      return fetch(rootUrl+"{{"+deletehash+"}}", {
+        headers: {
+          'Authorization': 'Client-ID ' + apiKey,
+        },
+      })
     }
 }
 
@@ -39,7 +46,7 @@ export const clarifaiCall = {
     return appClarifai.models.predict(Clarifai.GENERAL_MODEL, imageUrl).then(
     function(response) {
       let result = response.outputs[0].data.concepts
-      let numberOfWords = 4
+      let numberOfWords = 3
       let words = []
       for (let i = 0; i < numberOfWords; i++ ) {
         words.push(result[i].name)
