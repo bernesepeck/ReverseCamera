@@ -5,12 +5,15 @@ import rootReducer from './reducers'
 import PickImage from './containers/PickImage'
 import ShowImage from './containers/ShowImage'
 import styles from './StyleSheet'
-import { StyleSheet, Text, View, CameraRoll, Image, ScrollView, Button, AppRegistry, Header, } from 'react-native';
+import { Text, View } from 'react-native';
+
+//Create Store 
 const store = createStore(rootReducer)
 
 export default class App extends React.Component {
   render() {
     return (
+      //Provider passes Store to all Components
       <Provider store={store}>
         <View style={[styles.container]}>
           <View style={[styles.header]}>

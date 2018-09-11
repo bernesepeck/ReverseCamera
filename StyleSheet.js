@@ -1,7 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
+//gets the Dimensions of the Phone
 const win = Dimensions.get('window');
 
-
+//Stylesheet for the Components
 export default styles = StyleSheet.create({
     container: {
         flex: 1,

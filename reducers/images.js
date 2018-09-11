@@ -1,3 +1,4 @@
+//Reducer to save Images to store
 const imageReducer = (state = [], action) => {
   let newState
     switch (action.type) {

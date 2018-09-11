@@ -10,25 +10,24 @@ class ImageView extends React.Component {
     constructor(props){
         super(props);
     }
-
     render() {
-        console.log(this.props.image)
+        //Show Image when Image is Avaiable
         if(this.props.image.length > 0) {
             return (
                 <Image source={{uri: this.props.image}} resizeMode={'contain'} style={styles.image} />
             )
         }
+        //Text when there is no Image
         return(
             <Text>Bitte Bild auswählen</Text>
         )
     }
 }
 
+//Connect App to a Smart Component
 const mapStateToProps = function(state){
-    //console.log(state.imageReducer)
     return {
       image: state.imageReducer,
     }
 }
-
 export default connect(mapStateToProps)(ImageView)
