@@ -17,6 +17,11 @@ export default styles = StyleSheet.create({
         justifyContent: 'center',
         width: win.width,
     },
+    words: {
+        fontSize: 30,
+        textAlign: 'center',
+        marginTop: 20
+    },
     headerText: {
         alignSelf: 'center',
         color: 'white'

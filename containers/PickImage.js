@@ -31,12 +31,18 @@ class PickImage extends React.Component {
       _pickImage = async () => {
         //Variable to save Delete Hash for Imgur
         let deleteHash = ""
+        const object = {
+          imageurl: '',
+          words: [],
+          loaded: false
+        }
         //Pick Image, Save
         let result = await ImagePicker.launchImageLibraryAsync({
           allowsEditing: true,
           aspect: [4, 3],
           base64: true,
         });
+        object.loaded = false
         //Call Imgur API with Base64 of choosen picture
         callAPI.post(result.base64)
           .then((imgurResponse) => {
@@ -45,9 +51,12 @@ class PickImage extends React.Component {
             //Call Clarifai API with the Link of Imgur
             clarifaiCall.call(imgurResponse.data.link).then((clrafaiResponse) => {
               //Call Giphy API to Search GIF with Words return by Clarifai
+              object.words = clrafaiResponse;
               getGIF.call(clrafaiResponse).then((gifResponse) => {
                 //Add Image to Store
-                this.props.dispatch(addImage(gifResponse.data.images.downsized_medium.url))
+                object.imageurl = gifResponse.data.images.downsized_medium.url
+                object.loaded = true
+                this.props.dispatch(addImage(object))
                 //Call API to delete Picture on Imgur
                 callAPI.delete(deleteHash)
               }

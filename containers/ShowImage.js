@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import {bindActionCreators} from 'redux'
 import { connect } from 'react-redux';
 import { callAPI } from '../api';
@@ -11,14 +11,24 @@ class ImageView extends React.Component {
         super(props);
     }
     render() {
-        //Show Image when Image is Avaiable
-        if(this.props.image.length > 0) {
+        //Show Image when Image is loaded
+        if(this.props.image.loaded == true) {
             return (
-                <Image source={{uri: this.props.image}} resizeMode={'contain'} style={styles.image} />
+                <View>
+                    <Text style={styles.words}>
+                        {
+                            this.props.image.words.map((y, i) => {
+                                return (y+" ");
+                            })
+                        }
+                    </Text>
+                    <Image source={{uri: this.props.image.imageurl}} resizeMode={'contain'} style={styles.image} />
+                </View>
             )
-        }
+        } 
         //Text when there is no Image
         return(
+            
             <Text>Bitte Bild auswählen</Text>
         )
     }
